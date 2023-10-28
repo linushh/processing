@@ -3,12 +3,13 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3000;
-
+// test
+// test two
 let cpuUsageData = {};
 
 setInterval(async () => {
     cpuUsageData = await si.currentLoad();
-}, 3000);
+}, 3500);
 
 app.get('/data', async (req, res) => {
     try {
