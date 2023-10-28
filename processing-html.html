@@ -24,9 +24,16 @@
             const systemInfoDiv = document.getElementById('systemInfo');
             systemInfoDiv.innerHTML = `
                 <p>CPU-användning: ${data.cpuUsage}%</p>
+                <p>CPU-kärnor: ${data.cpuPhysicalCores}</p>
+                <p>CPU-trådar: ${data.cpuData}</p>
+                <p>CPU-tillverkare: ${data.cpuBrand}</p>
+                
+
                 <p>Diskutrymme använt: ${data.diskUsed}GB</p>
-                <p>Diskutrymme kvar: ${data.diskFree}GB</p>
+                <p>Diskutrymme totalt: ${data.diskFree}GB</p>
+
                 <p>Dator namn: ${data.osInfo}</p>
+
                 <p>Användare: ${data.userNames}</p>
                 <p>Loggdata: ${JSON.stringify(data.logData)}</p>
                 
@@ -41,7 +48,7 @@
             logDataDiv.innerHTML = `<pre>${logData}</pre>`;
         }
 
-        setInterval(updateValues, 4000);
+        setInterval(updateValues, 1500);
     </script>
 
     <script src="https://unpkg.com/systeminformation"></script>

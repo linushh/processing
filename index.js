@@ -24,24 +24,30 @@ app.get("/log", async(req, res) => {
 
 setInterval(async () => {
     cpuUsageData = await si.currentLoad();
-}, 3500);
+}, 1000);
 
 app.get('/data', async (req, res) => {
     try {
         const cpuUsage = await si.currentLoad();
+        const cpuData = await si.cpu();
         const diskInfo = await si.fsSize();
         const osInfo = await si.osInfo();
         const users = await si.users();
-        const logData = await si.processes(); // Exempel på hur du kan hämta loggdata
-         console.log('CPU-användning:', cpuUsage);
+        // const logData = await si.processes();
+        // console.log('CPU-användning:', cpuUsage);
         // console.log('Disk information:', diskInfo);
-        // console.log('Loggdata:', logData); // Se till att loggdata loggas korrekt
+        // console.log('Loggdata:', logData);
+        
 
         let cpuUsagePercentage = cpuUsage.currentLoad.toFixed(2);
+        let cpuCores = cpuData.cores;
+        let cpuPhysicalCores = cpuData.physicalCores;
+        let cpuBrand = cpuData.manufacturer;
         let diskUsed = 'N/A';
         let diskFree = 'N/A';
         let computerName = osInfo.hostname;
         let userNames = users.map(user => user.user);
+    
         
 
         if (cpuUsage && cpuUsage.currentload) {
@@ -55,11 +61,18 @@ app.get('/data', async (req, res) => {
 
         const data = {
             cpuUsage: cpuUsagePercentage,
+            cpuData: cpuCores,
+            cpuBrand: cpuBrand,
+            cpuPhysicalCores: cpuPhysicalCores,
+
             diskUsed: diskUsed,
             diskFree: diskFree,
+
             osInfo: computerName,
-            userNames: userNames 
-           // logData: logData // Se till att loggdata inkluderas i responsobjektet
+
+            userNames: userNames, 
+            
+           // logData: logData
         };
 
         res.send(data);
