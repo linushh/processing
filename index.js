@@ -11,7 +11,7 @@ let cpuUsageData = {};
 
 app.get("/log", async(req, res) => {
     try {
-        const { stdout, stderr } = await exec('sudo ipsec statusall');
+        const { stdout, stderr } = await exec('sudo ipsec statusall');  
         if (stderr) {
             throw new Error(stderr);
         }
@@ -32,10 +32,9 @@ app.get('/data', async (req, res) => {
         const diskInfo = await si.fsSize();
         const osInfo = await si.osInfo();
         const users = await si.users();
-        // const logData = await si.processes(); // Exempel på hur du kan hämta loggdata
-
-        console.log('CPU-användning:', cpuUsage);
-        console.log('Disk information:', diskInfo);
+        const logData = await si.processes(); // Exempel på hur du kan hämta loggdata
+         console.log('CPU-användning:', cpuUsage);
+        // console.log('Disk information:', diskInfo);
         // console.log('Loggdata:', logData); // Se till att loggdata loggas korrekt
 
         let cpuUsagePercentage = cpuUsage.currentLoad.toFixed(2);
