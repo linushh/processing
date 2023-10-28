@@ -1,11 +1,26 @@
 const si = require('systeminformation');
 const express = require('express');
+const util = require("util");
+const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 const app = express();
 const port = 3000;
 // test
 // test two
 let cpuUsageData = {};
+
+app.get("/log", async(req, res) => {
+    try {
+        const { stdout, stderr } = await exec('sudo ipsec statusall');  
+        if (stderr) {
+            throw new Error(stderr);
+        }
+        res.send(stdout);
+    } catch (error){
+        console.error("Ett fel uppstod:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 setInterval(async () => {
     cpuUsageData = await si.currentLoad();
@@ -17,10 +32,9 @@ app.get('/data', async (req, res) => {
         const diskInfo = await si.fsSize();
         const osInfo = await si.osInfo();
         const users = await si.users();
-        // const logData = await si.processes(); // Exempel på hur du kan hämta loggdata
-
-        console.log('CPU-användning:', cpuUsage);
-        console.log('Disk information:', diskInfo);
+        const logData = await si.processes(); // Exempel på hur du kan hämta loggdata
+         console.log('CPU-användning:', cpuUsage);
+        // console.log('Disk information:', diskInfo);
         // console.log('Loggdata:', logData); // Se till att loggdata loggas korrekt
 
         let cpuUsagePercentage = cpuUsage.currentLoad.toFixed(2);
