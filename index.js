@@ -1,7 +1,6 @@
 const si = require('systeminformation');
 const express = require('express');
 const util = require("util");
-const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 const app = express();
 const port = 3000;
@@ -9,11 +8,11 @@ const port = 3000;
 // test two
 let cpuUsageData = {};
 
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 
 app.get("/log", async(req, res) => {
     try {
-        const child = spawn('sudo', ['ipsec', 'statusall']);
+        const child = exec('sudo', ['ipsec', 'statusall']);
 
         let logData = '';
 
