@@ -9,14 +9,27 @@ const port = 3000;
 // test two
 let cpuUsageData = {};
 
+const { spawn } = require('child_process');
+
 app.get("/log", async(req, res) => {
     try {
-        const { stdout, stderr } = await exec('sudo ipsec statusall');
-        if (stderr) {
-            throw new Error(stderr);
-        }
-        res.send(stdout);
-    } catch (error){
+        const child = spawn('sudo', ['ipsec', 'statusall']);
+
+        let logData = '';
+
+        child.stdout.on('data', (data) => {
+            logData += data.toString();
+        });
+
+        child.stderr.on('data', (data) => {
+            console.error(`stderr: ${data}`);
+        });
+
+        child.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+            res.send(logData);
+        });
+    } catch (error) {
         console.error("Ett fel uppstod:", error);
         res.status(500).send("Internal Server Error");
     }
