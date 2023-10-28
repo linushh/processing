@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System information</title>
+</head>
+<body>
+    <h1>System Information</h1>
+    <div id="systemInfo">
+        <!-- Loggdata kommer att visas här -->
+    </div>
+    <button onclick="updateValues()">Refresh</button>
+
+    <script>
+        async function updateValues() {
+            const response = await fetch('/data');
+            const data = await response.json();
+
+            const systemInfoDiv = document.getElementById('systemInfo');
+            systemInfoDiv.innerHTML = `
+                <p>CPU-användning: ${data.cpuUsage}%</p>
+                <p>Diskutrymme använt: ${data.diskUsed}GB</p>
+                <p>Diskutrymme kvar: ${data.diskFree}GB</p>
+                <p>Dator namn: ${data.osInfo}</p>
+                <p>Användare: ${data.userNames}</p>
+                <p>Loggdata: ${JSON.stringify(data.logData)}</p>
+                
+            `;
+        }
+        setInterval(updateValues, 4000);
+    </script>
+
+    <script src="https://unpkg.com/systeminformation"></script>
+</body>
+</html>
