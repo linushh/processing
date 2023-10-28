@@ -10,7 +10,10 @@
     <div id="systemInfo">
         <!-- Loggdata kommer att visas här -->
     </div>
+    <button onclick="fetchLogData()">Get Log</button>
     <button onclick="updateValues()">Refresh</button>
+    <div id="logData"></div>
+    
 
     <script>
         async function updateValues() {
@@ -28,7 +31,16 @@
                 
             `;
         }
-        setInterval(updateValues, 4000);
+
+        async function fetchLogData(){
+            const response = await fetch("/log");
+            const logData = await response.text();
+
+            const logDataDiv = document.getElementById("logData");
+            logDataDiv.innerHTML = `<pre>${logData}</pre>`;
+        }
+
+        setInterval(updateValues, 5000);
     </script>
 
     <script src="https://unpkg.com/systeminformation"></script>

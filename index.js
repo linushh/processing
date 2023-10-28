@@ -1,14 +1,30 @@
 const si = require('systeminformation');
 const express = require('express');
+const util = require("util");
+const exec = util.promisify(require('child_process').exec);
 const path = require('path');
 const app = express();
 const port = 3000;
-
+// test
+// test two
 let cpuUsageData = {};
+
+app.get("/log", async(req, res) => {
+    try {
+        const { stdout, stderr } = await exec('sudo ipsec statusall');
+        if (stderr) {
+            throw new Error(stderr);
+        }
+        res.send(stdout);
+    } catch (error){
+        console.error("Ett fel uppstod:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 setInterval(async () => {
     cpuUsageData = await si.currentLoad();
-}, 3000);
+}, 3500);
 
 app.get('/data', async (req, res) => {
     try {
