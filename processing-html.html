@@ -17,6 +17,7 @@
 
     <h2>Lägg till användare</h2>
     <input type="text" id="addUserInput" placeholder="Användarnamn">
+    <input type="text" id="addUserPassword" placeholder="Lösenord">
     <button onclick="addUser()">Lägg till användare</button>
 
     <h2>Ta bort användare</h2>
@@ -28,7 +29,9 @@
 
         async function addUser(){
             const username = document.getElementById("addUserInput").value;
-            const response = await fetch(`/addUser?username=${username}`);
+            const password = document.getElementById("addUserPassword").value;
+
+            const response = await fetch(`/addUser?username=${username}&password=${password}`);
             const result = await response.text();
             alert(result);
         }
