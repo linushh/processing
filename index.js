@@ -10,13 +10,13 @@ const port = 3000;
 let cpuUsageData = {};
 
 app.get("/addUser", async(req, res) => {
-    const { username, password } = req.query; // Tillägg av 'password' här
+    const { username } = req.query;
     try{
-        const {stdout, stderr} = await exec(`echo -e "${password}\n${password}" | sudo useradd ${username} --stdin`);
+        const {stdout, stderr} = await exec(`sudo useradd ${username}`);
         if(stderr){
             throw new Error(stderr);
         }
-        res.send(`Användare ${username} har lagts till med lösenordet: ${password}.`)
+        res.send(`Användare ${username} har lagts till.`)
     } catch (error){
         console.error("Ett fel uppstod: ", error);
         res.status(500).send("Internal Server Error");
