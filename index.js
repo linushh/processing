@@ -9,6 +9,35 @@ const port = 3000;
 // test two
 let cpuUsageData = {};
 
+app.get("/addUser", async(req, res) => {
+    const { username } = req.query;
+    try{
+        const {stdout, stderr} = await exec(`sudo useradd ${username}`);
+        if(stderr){
+            throw new Error(stderr);
+        }
+        res.send(`Användare ${username} har lagts till.`)
+    } catch (error){
+        console.error("Ett fel uppstod: ", error);
+        res.status(500).send("Internal Server Error");
+    }
+
+});
+
+app.get("/removeUser", async(req, res) => {
+    const {username} = req.query;
+    try {
+        const {stdout, stderr} = await exec(`sudo userdel ${username}`);
+        if(stderr){
+            throw new Error(stderr);
+        }
+        res.send(`Användare ${username} har tagits bort.`)
+    } catch(error){
+        console.error("Ett fel uppstod: ", error);
+        req.status(500).send("Internal Server Error");
+    };
+});
+
 app.get("/log", async(req, res) => {
     try {
         const { stdout, stderr } = await exec('sudo ipsec statusall');  

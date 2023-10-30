@@ -14,9 +14,33 @@
     <button onclick="fetchLogData()">Get Log</button>
     <button onclick="updateValues()">Refresh</button>
     <div id="logData"></div>
+
+    <h2>Lägg till användare</h2>
+    <input type="text" id="addUserInput" placeholder="Användarnamn">
+    <button onclick="addUser()">Lägg till användare</button>
+
+    <h2>Ta bort användare</h2>
+    <input type="text" id="removeUserInput" placeholder="Användarnamn">
+    <button onclick="removeUser()">Ta bort användare</button>
     
 
     <script>
+
+        async function addUser(){
+            const username = document.getElementById("addUserInput").value;
+            const response = await fetch(`/addUser?username=${username}`);
+            const result = await response.text();
+            alert(result);
+        }
+
+        async function removeUser(){
+            const username = document.getElementById("removeUserInput").value;
+            const response = await fetch(`/removeUser?username=${username}`);
+            const result = await response.text();
+            alert(result);
+        }
+
+
         async function updateValues() {
             const response = await fetch('/data');
             const data = await response.json();
