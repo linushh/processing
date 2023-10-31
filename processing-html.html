@@ -22,12 +22,17 @@
 
     <button onclick="fetchLogData()">Get Log</button>
     <button onclick="updateValues()">Refresh</button>
+    <button onclick="restartStrongSwan()">Restart StrongSwan</button>
     <div id="logData"></div>
 
    
     
 
     <script>
+
+        async function restartStrongSwan(){
+            const response = await fetch(`/rebootStrongSwan`)
+        }
 
         async function addUser(){
             const username = document.getElementById("addUserInput").value;
