@@ -9,17 +9,38 @@ const port = 3000;
 // test two
 let cpuUsageData = {};
 
-app.get("/rebootStrongSwan"), async(req, res) => {
-    try {
-        const {stdout, stderr} = await exec(`sudo systemctl restart strongswan-starter`);
+
+
+
+
+app.get("/rebootSystem", async (req,res) => {
+    try{
+        const {stdout, stderr} = await exec (`sudo reboot now`);
         if(stderr){
             throw new Error(stderr);
         }
-        res.send("Startar om systemet");
+        res.send("Systemet startas om");
     } catch(error){
-        console.error(500).send("Internal Server Error");
+        console.log("Ett fel uppstod rebootSystem");
+        res.status(500).send("Internt serverfel");
     }
-} 
+
+    
+});
+
+
+app.get("/restartStrongSwan", async (req, res) => {
+    try {
+        const { stdout, stderr } = await exec('sudo systemctl restart strongswan-starter');
+        if (stderr) {
+            throw new Error(stderr);
+        }
+        res.send("StrongSwan-tjänsten har startats om.");
+    } catch (error) {
+        console.error("Ett fel uppstod:", error);
+        res.status(500).send("Internt serverfel");
+    }
+});
 
 app.get("/addUser", async(req, res) => {
     const { username } = req.query;
