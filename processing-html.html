@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System information</title>
 </head>
+
 <body>
     <h1>System Information</h1>
     <div id="systemInfo">
         <!-- Loggdata kommer att visas här -->
     </div>
-    
+
 
     <h2>Lägg till användare</h2>
     <input type="text" id="addUserInput" placeholder="Användarnamn">
@@ -20,28 +22,50 @@
     <input type="text" id="removeUserInput" placeholder="Användarnamn">
     <button onclick="removeUser()">Ta bort användare</button>
 
+
+    
     <button onclick="fetchLogData()">Get Log</button>
     <button onclick="updateValues()">Refresh</button>
     <button onclick="restartStrongSwan()">Restart StrongSwan</button>
+    <button onclick="rebootSystem()">Reboot system</button>
     <div id="logData"></div>
 
-   
-    
 
     <script>
 
-        async function restartStrongSwan(){
-            const response = await fetch(`/rebootStrongSwan`)
-        }// comment
 
-        async function addUser(){
+        async function rebootSystem(){
+            try{
+                const response = await fetch(`/rebootSystem`);
+                const data = await response.text();
+                alert("Systemet startar om");
+            } catch(error) {
+                console.error("Internt serverfel", error);
+                alert("Något gick fel.")
+            }
+        }
+
+
+        async function strongSwanReboot(){
+            try {
+                const response = await fetch("/restartStrongSwan");
+                const data = await response.text();
+                alert("StrongSwan-tjänsten har startats om");
+            } catch (error) {
+                console.error("Internt serverfel", error);
+                alert("Något gick fel. Se konsolfönstret för detaljer.");
+            }
+        }
+
+
+        async function addUser() {
             const username = document.getElementById("addUserInput").value;
             const response = await fetch(`/addUser?username=${username}`);
             const result = await response.text();
             alert(result);
         }
 
-        async function removeUser(){
+        async function removeUser() {
             const username = document.getElementById("removeUserInput").value;
             const response = await fetch(`/removeUser?username=${username}`);
             const result = await response.text();
@@ -72,7 +96,7 @@
             `;
         }
 
-        async function fetchLogData(){
+        async function fetchLogData() {
             const response = await fetch("/log");
             const logData = await response.text();
 
@@ -85,4 +109,5 @@
 
     <script src="https://unpkg.com/systeminformation"></script>
 </body>
+
 </html>
