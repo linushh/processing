@@ -40,7 +40,8 @@ app.get("/removeUser", async(req, res) => {
 
 app.get("/log", async(req, res) => {
     try {
-        const { stdout, stderr } = await exec('sudo ipsec statusall');  
+        // const { stdout, stderr } = await exec('sudo ipsec statusall');
+        const { stdout, stderr } = await exec('journalctl -u strongswan-starter.service');  
         if (stderr) {
             throw new Error(stderr);
         }
