@@ -11,9 +11,6 @@
         <!-- Loggdata kommer att visas här -->
     </div>
     
-    <button onclick="fetchLogData()">Get Log</button>
-    <button onclick="updateValues()">Refresh</button>
-    <div id="logData"></div>
 
     <h2>Lägg till användare</h2>
     <input type="text" id="addUserInput" placeholder="Användarnamn">
@@ -22,6 +19,12 @@
     <h2>Ta bort användare</h2>
     <input type="text" id="removeUserInput" placeholder="Användarnamn">
     <button onclick="removeUser()">Ta bort användare</button>
+
+    <div id="logData"></div>
+    <button onclick="fetchLogData()">Get Log</button>
+    <button onclick="updateValues()">Refresh</button>
+
+   
     
 
     <script>
